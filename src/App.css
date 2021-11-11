@@ -1,0 +1,13 @@
+.layout {
+  height: 100vh;
+}
+.content {
+  display: flex;
+  flex-direction: column;
+}
+.contentMiddle {
+  align-items: center;
+}
+.contentCenter {
+  justify-content: center;
+}
