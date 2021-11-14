@@ -1,9 +1,10 @@
 import {useState} from 'react';
+import PropTypes from 'prop-types';
 import {Form, Input, Button} from 'antd';
 
 import {validationRules} from '@utils/forms';
 
-const LoginForm = ({isLoading = false, onSubmit}) => {
+const LoginForm = ({isLoading, onSubmit}) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -35,6 +36,15 @@ const LoginForm = ({isLoading = false, onSubmit}) => {
       </Form.Item>
     </Form>
   );
+};
+
+LoginForm.propTypes = {
+  isLoading: PropTypes.bool,
+  onSubmit: PropTypes.func.isRequired
+};
+
+LoginForm.defaultProps = {
+  isLoading: false
 };
 
 export default LoginForm;

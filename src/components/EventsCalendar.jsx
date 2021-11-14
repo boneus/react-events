@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 
 import Calendar from '@components/Calendar';
@@ -20,6 +21,20 @@ const EventsCalendar = ({events, onSelect}) => {
 
   return <Calendar dateCellRender={dateCellRender} onSelect={onSelect}
                    disabledDate={current => current < dayjs().subtract(1, 'day')}/>;
+};
+
+EventsCalendar.propTypes = {
+  events: PropTypes.arrayOf(PropTypes.shape({
+    author: PropTypes.string,
+    description: PropTypes.string,
+    guest: PropTypes.string,
+    date: PropTypes.string
+  })),
+  onSelect: PropTypes.func.isRequired
+};
+
+EventsCalendar.defaultProps = {
+  events: []
 };
 
 export default EventsCalendar;

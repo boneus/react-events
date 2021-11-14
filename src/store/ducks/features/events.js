@@ -97,17 +97,19 @@ export const fetchEvents = (username) => async (dispatch) => {
   dispatch(setIsLoading(false));
 };
 
-export const addEvent = (event) => async (dispatch) => {
+export const addEvent = (userEvent) => async (dispatch) => {
   dispatch(setIsLoading(true));
 
   try {
     const events = JSON.parse(localStorage.getItem('events') || '[]');
-    events.push(event);
+    events.push(userEvent);
 
     localStorage.setItem('events', JSON.stringify(events));
 
+    const userEvents = events.filter((event) => event.author === userEvent.author || event.guest === userEvent.author);
+
     dispatch(setError());
-    dispatch(setEvents(events));
+    dispatch(setEvents(userEvents));
     dispatch(setNotification({type: 'success', message: 'New event is successfully added'}, moduleName));
   } catch (e) {
     dispatch(setError('Server: Error while adding new event'));

@@ -1,28 +1,23 @@
-import {useNavigate} from 'react-router';
+import PropTypes from 'prop-types';
 import {Layout, Row, Menu} from 'antd';
 
-import {useAuthSelector, useAuthActions} from '@store/ducks/features/auth';
 import {routesMap} from '@router/routes';
 
-const Header = () => {
-  const navigate = useNavigate();
-  const {isAuthed, user} = useAuthSelector();
-  const {logout} = useAuthActions()
-
+const Header = ({user, isAuthed, logout, navigate}) => {
   return (
     <Layout.Header>
-      <Row justify='end'>
+      <Row justify="end">
         {isAuthed ? (
           <>
             <div style={{color: 'white'}}>{user.username}</div>
-            <Menu theme='dark' mode='horizontal' selectable={false}>
+            <Menu theme="dark" mode="horizontal" selectable={false}>
               <Menu.Item onClick={logout} key={1}>
                 Logout
               </Menu.Item>
             </Menu>
           </>
         ) : (
-          <Menu theme='dark' mode='horizontal' selectable={false}>
+          <Menu theme="dark" mode="horizontal" selectable={false}>
             <Menu.Item onClick={() => navigate(routesMap.login)} key={1}>
               Login
             </Menu.Item>
@@ -31,6 +26,19 @@ const Header = () => {
       </Row>
     </Layout.Header>
   );
+};
+
+Header.propTypes = {
+  user: PropTypes.shape({
+    username: PropTypes.string
+  }).isRequired,
+  isAuthed: PropTypes.bool,
+  logout: PropTypes.func.isRequired,
+  navigate: PropTypes.func.isRequired
+};
+
+Header.defaultProps = {
+  isAuthed: false
 };
 
 export default Header;
