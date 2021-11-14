@@ -1,5 +1,13 @@
+import {Card} from 'antd';
+
+import LoginForm from '@components/LoginForm';
+
 const Login = () => {
-  return <div>LOGIN</div>;
+  return (
+    <Card>
+      <LoginForm />
+    </Card>
+  );
 };
 
 export default Login;

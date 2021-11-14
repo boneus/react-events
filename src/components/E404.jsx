@@ -1,12 +1,12 @@
 import {Link} from 'react-router-dom';
 import {Card, Typography} from 'antd';
 
-const {Title} = Typography;
+import {routesMap} from '@router/routes';
 
-const E404 = ({title = 'Page not found', goTo = '/'}) => {
+const E404 = ({title = 'Page not found', goTo = routesMap.events}) => {
   return (
     <Card>
-      <Title>{title}</Title>
+      <Typography.Title>{title}</Typography.Title>
       <p>
         Go to <Link to={goTo}>home page</Link>
       </p>
