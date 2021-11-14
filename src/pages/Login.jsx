@@ -1,11 +1,15 @@
 import {Card} from 'antd';
 
+import {useAuthActions, useAuthSelector} from '@store/ducks/features/auth';
 import LoginForm from '@components/LoginForm';
 
 const Login = () => {
+  const {isLoading} = useAuthSelector();
+  const {login} = useAuthActions();
+
   return (
     <Card>
-      <LoginForm />
+      <LoginForm isLoading={isLoading} onSubmit={login}/>
     </Card>
   );
 };

@@ -3,7 +3,7 @@ import {bindActionCreators} from 'redux';
 import {useDispatch, useSelector} from 'react-redux';
 
 import {getUsers} from '@apis/users';
-import {setNotification} from "@store/ducks/core/ui"
+import {setNotification} from '@store/ducks/core/ui';
 
 export const moduleName = 'AUTH';
 
@@ -75,8 +75,8 @@ export const login = ({username, password}) => (dispatch) => {
         localStorage.setItem('auth', 'true');
         localStorage.setItem('username', authedUser.username);
 
-        delete authedUser.password
-        dispatch(setError(null));
+        delete authedUser.password;
+        dispatch(setError());
         dispatch(setUser(authedUser));
         dispatch(setIsAuthed(true));
         dispatch(setNotification({type: 'success', message: 'Welcome!'}, moduleName));
@@ -98,28 +98,28 @@ export const logout = () => (dispatch) => {
   dispatch(setIsAuthed(false));
   dispatch(setUser({}));
   dispatch(setNotification({type: 'success', message: 'Goodbye!'}, moduleName));
-}
+};
 
 /**
  * Action creators
  */
-export const setIsAuthed = (payload) => ({
+export const setIsAuthed = (isAuthed) => ({
   type: SET_IS_AUTHED,
-  payload,
+  payload: isAuthed,
 });
 
-export const setUser = (payload) => ({
+export const setUser = (user) => ({
   type: SET_USER,
-  payload,
+  payload: user,
 });
 
-export const setIsLoading = (payload) => ({
+export const setIsLoading = (isloading) => ({
   type: SET_IS_LOADING,
-  payload,
+  payload: isloading,
 });
 
-export const setError = (payload) => ({
+export const setError = (error = null) => ({
   type: SET_ERROR,
-  payload,
+  payload: error,
 });
 
