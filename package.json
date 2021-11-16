@@ -4,7 +4,9 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "serve": "vite preview"
+    "serve": "vite preview",
+    "docker:start": "docker-compose up --build",
+    "docker:dev": "docker-compose -f docker-compose.yml -f docker-compose.dev.yml up --build"
   },
   "dependencies": {
     "antd": "^4.16.13",
