@@ -1,27 +1,24 @@
 {
   "name": "react-events",
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "ReactJS app example",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "serve": "vite preview",
     "docker:start": "docker-compose up --build",
     "docker:dev": "docker-compose -f docker-compose.yml -f docker-compose.dev.yml up --build"
   },
-  "dependencies": {
-    "antd": "^4.16.13",
-    "axios": "^0.24.0",
-    "dayjs": "^1.10.7",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "react-redux": "^7.2.6",
-    "react-router-dom": "^6.0.2",
-    "redux": "^4.1.2",
-    "redux-thunk": "^2.4.0"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/boneus/react-events.git"
   },
-  "devDependencies": {
-    "@vitejs/plugin-react": "^1.0.8",
-    "prop-types": "^15.7.2",
-    "vite": "^2.6.14"
-  }
+  "keywords": [
+    "reactjs",
+    "redux",
+    "react-router"
+  ],
+  "author": "Stanislav Tiptsov <4terion@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/boneus/react-events/issues"
+  },
+  "homepage": "https://github.com/boneus/react-events#readme"
 }

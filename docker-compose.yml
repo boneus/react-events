@@ -1,11 +1,11 @@
 version: '3.8'
 
 services:
-  app:
+  client:
     build:
-      context: ./
+      context: ./client
       dockerfile: Dockerfile.prod
-    container_name: react-events
+    container_name: react-events-client
     command: serve -s dist -l 3000
     restart: unless-stopped
     ports:

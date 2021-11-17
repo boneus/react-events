@@ -1,13 +1,13 @@
 version: '3.8'
 
 services:
-  app:
+  client:
     build:
-      context: ./
+      context: ./client
       dockerfile: Dockerfile.dev
     container_name: react-events-dev
     command: npm run dev
     stdin_open: true
     tty: true
     volumes:
-      - ./src:/usr/src/app/src
+      - ./client/src:/usr/src/app/src
