@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import {Link} from 'react-router-dom';
 import {Card, Typography} from 'antd';
 
-import {routesMap} from '@router/routes';
+import {routesMap} from '@configs/router';
 
 const E404 = ({title, goTo}) => {
   return (

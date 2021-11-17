@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import {Layout, Row, Menu} from 'antd';
 
-import {routesMap} from '@router/routes';
+import {routesMap} from '@configs/router';
 
 const Header = ({user, isAuthed, logout, navigate}) => {
   return (
