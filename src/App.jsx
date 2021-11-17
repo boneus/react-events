@@ -2,7 +2,7 @@ import {useEffect} from 'react';
 import {Layout} from 'antd';
 import 'antd/dist/antd.css';
 
-import {useAuthActions} from '@store/ducks/features/auth';
+import {useAuthActions} from '@store/features/auth';
 import AppRouter from '@router';
 import './App.css';
 

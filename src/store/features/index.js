@@ -1,8 +1,8 @@
 import {combineReducers} from 'redux';
 
-import {uiMiddleware} from './core/ui';
-import auth from './features/auth';
-import events from './features/events';
+import {uiMiddleware} from './ui';
+import auth from './auth';
+import events from './events';
 
 export default combineReducers({auth, events});
 

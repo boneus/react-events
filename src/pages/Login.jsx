@@ -1,6 +1,6 @@
 import {Card} from 'antd';
 
-import {useAuthActions, useAuthSelector} from '@store/ducks/features/auth';
+import {useAuthActions, useAuthSelector} from '@store/features/auth';
 import LoginForm from '@components/LoginForm';
 
 const Login = () => {

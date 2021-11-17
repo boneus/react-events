@@ -2,8 +2,8 @@ import {useEffect, useState} from 'react';
 import dayjs from 'dayjs';
 import {Modal} from 'antd';
 
-import {useAuthSelector} from '@store/ducks/features/auth';
-import {useEventsActions, useEventsSelector} from '@store/ducks/features/events';
+import {useAuthSelector} from '@store/features/auth';
+import {useEventsActions, useEventsSelector} from '@store/features/events';
 import EventsCalendar from '@components/EventsCalendar';
 import EventForm from '@components/EventForm';
 

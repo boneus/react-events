@@ -3,7 +3,7 @@ import {bindActionCreators} from 'redux';
 import {useDispatch, useSelector} from 'react-redux';
 
 import {getUsers} from '@apis/users';
-import {setNotification} from '@store/ducks/core/ui';
+import {setNotification} from './ui';
 
 export const moduleName = 'EVENTS';
 
