@@ -1,12 +1,12 @@
 import {Suspense} from 'react';
 import {useRoutes} from 'react-router';
-import {useSelector} from 'react-redux';
 
+import {useAuthSelector} from '@store/features/auth';
 import routes from '@router/routes';
 import Loader from '@components/Loader';
 
 const AppRouter = () => {
-  const {isAuthed} = useSelector((state) => state.auth);
+  const {isAuthed} = useAuthSelector();
   const appRoutes = useRoutes(routes(isAuthed));
 
   return <Suspense fallback={<Loader/>}>{appRoutes}</Suspense>;
