@@ -11,8 +11,8 @@ const Events = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedDate, setSelectedDate] = useState(dayjs());
 
-  const {user} = useAuthSelector((state) => state.auth);
-  const {guests, events} = useEventsSelector((state) => state.events);
+  const {user} = useAuthSelector();
+  const {guests, events, isLoading} = useEventsSelector();
   const {fetchGuests, addEvent, fetchEvents} = useEventsActions();
 
   useEffect(() => {
@@ -39,7 +39,7 @@ const Events = () => {
         footer={null}
         onCancel={() => setIsModalVisible(false)}
       >
-        <EventForm guests={guests} onSubmit={addNewEvent} author={user} selectedDate={selectedDate}/>
+        <EventForm guests={guests} onSubmit={addNewEvent} author={user} selectedDate={selectedDate} isLoading={isLoading}/>
       </Modal>
     </>
   );

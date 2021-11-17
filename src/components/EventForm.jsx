@@ -7,7 +7,7 @@ import DatePicker from '@components/DatePicker';
 import {validationRules} from '@utils/forms';
 import {formatDate} from '@utils/dates';
 
-const EventForm = ({guests, onSubmit, author, selectedDate}) => {
+const EventForm = ({guests, onSubmit, author, selectedDate, isLoading}) => {
   const [event, setEvent] = useState({
     date: formatDate(selectedDate.toDate()),
     description: '',
@@ -64,7 +64,7 @@ const EventForm = ({guests, onSubmit, author, selectedDate}) => {
 
       <Row justify="end">
         <Form.Item>
-          <Button type="primary" htmlType="submit">
+          <Button type="primary" htmlType="submit" loading={isLoading}>
             Add
           </Button>
         </Form.Item>
@@ -77,12 +77,14 @@ EventForm.propTypes = {
   author: PropTypes.shape({username: PropTypes.string}).isRequired,
   selectedDate: PropTypes.instanceOf(dayjs),
   guests: PropTypes.arrayOf(PropTypes.shape({username: PropTypes.string})),
-  onSubmit: PropTypes.func.isRequired
+  onSubmit: PropTypes.func.isRequired,
+  isLoading: PropTypes.bool
 };
 
 EventForm.defaultProps = {
   selectedDate: dayjs(),
-  guests: []
+  guests: [],
+  isLoading: false
 };
 
 export default EventForm;
