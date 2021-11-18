@@ -2,7 +2,7 @@ import {useMemo} from 'react';
 import {bindActionCreators} from 'redux';
 import {useDispatch, useSelector} from 'react-redux';
 
-import {getUsers} from '@apis/users';
+import {getUser} from '@apis/users';
 import {setNotification} from './ui';
 
 export const moduleName = 'AUTH';
@@ -61,15 +61,13 @@ export const useAuthSelector = () => useSelector((state) => state.auth);
 /**
  * Thunks
  */
-export const login = ({username, password}) => (dispatch) => {
+export const login = (credentials) => (dispatch) => {
   dispatch(setIsLoading(true));
 
   setTimeout(async () => {
     try {
-      const response = await getUsers();
-      const authedUser = response.data.find(
-        (user) => user.username === username && user.password === password
-      );
+      const response = await getUser(credentials);
+      const authedUser = response.data[0];
 
       if (authedUser) {
         localStorage.setItem('auth', 'true');

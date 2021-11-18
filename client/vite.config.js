@@ -5,7 +5,11 @@ import path from 'path';
 // https://vitejs.dev/config/
 export default defineConfig({
   server: {
-    host: true
+    host: true,
+    port: process.env.PORT || 3000,
+    hmr: {
+      clientPort: process.env.NGINX_PORT || process.env.PORT || 3000,
+    }
   },
   plugins: [react()],
   resolve: {

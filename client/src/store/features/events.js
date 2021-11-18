@@ -3,6 +3,7 @@ import {bindActionCreators} from 'redux';
 import {useDispatch, useSelector} from 'react-redux';
 
 import {getUsers} from '@apis/users';
+import {getEventsByUser, addEvent} from '@apis/events';
 import {setNotification} from './ui';
 
 export const moduleName = 'EVENTS';
@@ -55,7 +56,7 @@ export const useEventsActions = () => {
       setError,
       fetchGuests,
       fetchEvents,
-      addEvent
+      addUserEvent
     }, dispatch),
     [dispatch]
   );
@@ -85,11 +86,10 @@ export const fetchEvents = (username) => async (dispatch) => {
   dispatch(setIsLoading(true));
 
   try {
-    const events = JSON.parse(localStorage.getItem('events') || '[]');
-    const userEvents = events.filter((event) => event.author === username || event.guest === username);
+    const response = await getEventsByUser({username});
 
     dispatch(setError());
-    dispatch(setEvents(userEvents));
+    dispatch(setEvents(response.data));
   } catch (e) {
     dispatch(setError('Server: Error while fetching events'));
   }
@@ -97,16 +97,12 @@ export const fetchEvents = (username) => async (dispatch) => {
   dispatch(setIsLoading(false));
 };
 
-export const addEvent = (userEvent) => async (dispatch) => {
+export const addUserEvent = (userEvent) => async (dispatch, getState) => {
   dispatch(setIsLoading(true));
 
   try {
-    const events = JSON.parse(localStorage.getItem('events') || '[]');
-    events.push(userEvent);
-
-    localStorage.setItem('events', JSON.stringify(events));
-
-    const userEvents = events.filter((event) => event.author === userEvent.author || event.guest === userEvent.author);
+    const response = await addEvent(userEvent);
+    const userEvents = getState().events.events.push(response.data);
 
     dispatch(setError());
     dispatch(setEvents(userEvents));

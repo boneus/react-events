@@ -3,8 +3,13 @@
   "version": "1.0.0",
   "description": "ReactJS app example",
   "scripts": {
+    "start": "concurrently \"npm run server:start\" \"npm run client:start\"",
+    "dev": "concurrently \"npm run server:start\" \"npm run client:dev\"",
     "docker:start": "docker-compose up --build",
-    "docker:dev": "docker-compose -f docker-compose.yml -f docker-compose.dev.yml up --build"
+    "docker:dev": "docker-compose -f docker-compose.yml -f docker-compose.dev.yml up --build",
+    "server:start": "npm start --prefix api/",
+    "client:dev": "npm run dev --prefix client/",
+    "client:start": "npm run start --prefix client/"
   },
   "repository": {
     "type": "git",
@@ -20,5 +25,8 @@
   "bugs": {
     "url": "https://github.com/boneus/react-events/issues"
   },
-  "homepage": "https://github.com/boneus/react-events#readme"
+  "homepage": "https://github.com/boneus/react-events#readme",
+  "devDependencies": {
+    "concurrently": "^6.4.0"
+  }
 }

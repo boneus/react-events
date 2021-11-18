@@ -13,7 +13,7 @@ const Events = () => {
 
   const {user} = useAuthSelector();
   const {guests, events, isLoading} = useEventsSelector();
-  const {fetchGuests, addEvent, fetchEvents} = useEventsActions();
+  const {fetchGuests, addUserEvent, fetchEvents} = useEventsActions();
 
   useEffect(() => {
     fetchGuests();
@@ -26,7 +26,7 @@ const Events = () => {
   };
 
   const addNewEvent = (event) => {
-    addEvent(event);
+    addUserEvent(event);
     setIsModalVisible(false);
   };
 
