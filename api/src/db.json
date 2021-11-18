@@ -1,0 +1,53 @@
+{
+  "users": [
+    {
+      "username": "user",
+      "password": "123"
+    },
+    {
+      "username": "admin",
+      "password": "123"
+    },
+    {
+      "username": "timur",
+      "password": "123"
+    }
+  ],
+  "events": [
+    {
+      "date": "11.18.2021",
+      "description": "event1 for admin",
+      "guest": "admin",
+      "author": "user",
+      "id": 1
+    },
+    {
+      "date": "11.19.2021",
+      "description": "event1 for user",
+      "guest": "user",
+      "author": "admin",
+      "id": 2
+    },
+    {
+      "date": "11.19.2021",
+      "description": "event2 for user",
+      "guest": "user",
+      "author": "admin",
+      "id": 3
+    },
+    {
+      "date": "11.19.2021",
+      "description": "event3 for user",
+      "guest": "user",
+      "author": "admin",
+      "id": 4
+    },
+    {
+      "date": "11.18.2021",
+      "description": "event2 for admin",
+      "guest": "admin",
+      "author": "admin",
+      "id": 5
+    }
+  ]
+}

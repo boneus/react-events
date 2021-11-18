@@ -102,7 +102,7 @@ export const addUserEvent = (userEvent) => async (dispatch, getState) => {
 
   try {
     const response = await addEvent(userEvent);
-    const userEvents = getState().events.events.push(response.data);
+    const userEvents = [...getState().events.events, response.data];
 
     dispatch(setError());
     dispatch(setEvents(userEvents));

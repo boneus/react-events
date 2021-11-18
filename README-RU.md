@@ -16,7 +16,7 @@
     * Dev-режим: `npm run docker:dev`
     * Prod-режим: `npm run docker:start`
 * Использую алиасы `@pages`, `@components`, `@router`, `@store` и т.д., чтобы не было ада из относительных путей.
-* В качестве сервера с базой данных использую файл `users.json` в папке public. Добавленные мероприятия храню в **localStorage**.
+* В качестве API-сервера использую [**json-server**](https://github.com/typicode/json-server).
 * В роутере использую **React Router 6**, **layouts**, **lazy подгрузку страниц** (что приводит к **code splitting**'у) и **React.Suspense** для индикатора загрузки.
 * **Подключил Redux DevTools**.
 * Redux store организовал по паттерну [**ducks**](https://redux.js.org/style-guide/style-guide#structure-files-as-feature-folders-with-single-file-logic). **Один модуль - один файл**, включающий в себя все action types, action creators, reducers, middlewares, thunks, selectors и hooks, которые относятся к этому модулю.

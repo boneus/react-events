@@ -3,12 +3,16 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "start": "json-server -c config.js db.json"
+    "start": "node ./src/index.js",
+    "dev": "nodemon ./src/index.js"
   },
   "keywords": [],
   "author": "Stanislav Tiptsov <4terion@gmail.com>",
   "license": "ISC",
   "dependencies": {
     "json-server": "^0.17.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
   }
 }

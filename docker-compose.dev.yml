@@ -13,6 +13,7 @@ services:
       - ./client/src:/usr/src/app/src
 
   api:
+    command: npm run dev
     volumes:
       - ./api/src:/usr/src/app/src
 
