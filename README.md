@@ -1,3 +1,5 @@
+README на русском: https://github.com/boneus/react-events/blob/main/README-RU.md
+
 # ReactJS app example
 
 ## Stack

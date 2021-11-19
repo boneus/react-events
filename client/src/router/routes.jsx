@@ -28,6 +28,6 @@ export default (isLoggedIn) => [
   {
     path: '*',
     element: <BasicLayout/>,
-    children: [{index: true, element: <E404/>}],
+    children: [{path: '*', element: <E404/>}],
   },
 ];

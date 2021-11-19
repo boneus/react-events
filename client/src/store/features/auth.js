@@ -4,6 +4,7 @@ import {useDispatch, useSelector} from 'react-redux';
 
 import {getUser} from '@apis/users';
 import {setNotification} from './ui';
+import {setEvents} from './events';
 
 export const moduleName = 'AUTH';
 
@@ -96,6 +97,7 @@ export const logout = () => (dispatch) => {
   dispatch(setIsAuthed(false));
   dispatch(setUser({}));
   dispatch(setNotification({type: 'success', message: 'Goodbye!'}, moduleName));
+  dispatch(setEvents([]));
 };
 
 /**
