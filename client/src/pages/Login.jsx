@@ -9,7 +9,7 @@ const Login = () => {
 
   return (
     <Card>
-      <LoginForm isLoading={isLoading} onSubmit={login}/>
+      <LoginForm isLoading={isLoading} onSubmit={login} />
     </Card>
   );
 };

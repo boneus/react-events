@@ -11,9 +11,14 @@ const MainLayout = () => {
 
   return (
     <>
-      <Header user={user} isAuthed={isAuthed} logout={logout} navigate={navigate}/>
-      <Layout.Content className="content contentMiddle contentCenter">
-        <Outlet/>
+      <Header
+        user={user}
+        isAuthed={isAuthed}
+        logout={logout}
+        navigate={navigate}
+      />
+      <Layout.Content className='content contentMiddle contentCenter'>
+        <Outlet />
       </Layout.Content>
     </>
   );

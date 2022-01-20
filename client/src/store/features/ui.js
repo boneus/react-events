@@ -1,28 +1,37 @@
 import {useMemo} from 'react';
-import {bindActionCreators} from 'redux';
+import {createSlice, bindActionCreators} from '@reduxjs/toolkit';
 import {useDispatch} from 'react-redux';
 import {message} from 'antd';
 
-export const moduleName = 'UI';
+const moduleName = 'UI';
 
-/**
- * Action types
- */
-export const SET_NOTIFICATION = `${moduleName}/setNotification`;
+const uiSlice = createSlice({
+  name: moduleName,
+  initialState: {},
+  reducers: {
+    setNotification: (state, {payload}) => {
+      payload.message && message[payload.type](payload.message);
+    },
+  },
+});
+
+export default uiSlice.reducer;
+
+export const {setNotification} = uiSlice.actions;
 
 /**
  * Middlewares
  */
-export const uiMiddleware = ({dispatch, getState}) => next => action => {
-  next(action);
+export const uiMiddleware =
+  ({dispatch, getState}) =>
+  (next) =>
+  (action) => {
+    next(action);
 
-  if (action.type.includes('setError') && action.payload) {
-    message.error(action.payload);
-  }
-  if (action.type.includes('setNotification') && action.payload.message) {
-    message[action.payload.type](action.payload.message);
-  }
-};
+    if (action.type.includes('setError') && action.payload) {
+      message.error(action.payload);
+    }
+  };
 
 /**
  * Hooks
@@ -30,18 +39,7 @@ export const uiMiddleware = ({dispatch, getState}) => next => action => {
 export const useUIActions = () => {
   const dispatch = useDispatch();
   return useMemo(
-    () => bindActionCreators({setNotification}, dispatch),
+    () => bindActionCreators({...uiSlice.actions}, dispatch),
     [dispatch]
   );
 };
-
-/**
- * Action creators
- */
-export const setNotification = (message, entity = '') => ({
-  type: `[${entity}] ${SET_NOTIFICATION}`,
-  payload: message,
-  entity,
-});
-
-

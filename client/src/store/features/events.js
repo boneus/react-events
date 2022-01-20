@@ -1,5 +1,9 @@
 import {useMemo} from 'react';
-import {bindActionCreators} from 'redux';
+import {
+  createSlice,
+  bindActionCreators,
+  createAsyncThunk,
+} from '@reduxjs/toolkit';
 import {useDispatch, useSelector} from 'react-redux';
 
 import {getUsers} from '@apis/users';
@@ -8,40 +12,120 @@ import {setNotification} from './ui';
 
 export const moduleName = 'EVENTS';
 
-/**
- * Action types
- */
-export const SET_GUESTS = `${moduleName}/setGuests`;
-export const SET_EVENTS = `${moduleName}/setEvents`;
-export const SET_IS_LOADING = `${moduleName}/setIsLoading`;
-export const SET_ERROR = `${moduleName}/setError`;
+const eventsSlice = createSlice({
+  name: moduleName,
+  initialState: {
+    guests: [],
+    events: [],
+    isLoading: false,
+    error: null,
+  },
+  reducers: {
+    setGuests: (state, {payload}) => {
+      state.guests = payload;
+    },
+    setEvents: (state, {payload}) => {
+      state.events = payload;
+    },
+    setIsloading: (state, {payload}) => {
+      state.isLoading = payload;
+    },
+    setError: (state, {payload}) => {
+      state.error = payload;
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchGuests.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(fetchGuests.fulfilled, (state, {payload}) => {
+        state.error = null;
+        state.guests = payload;
+        state.isLoading = false;
+      })
+      .addCase(fetchGuests.rejected, (state, {payload}) => {
+        state.error = payload;
+        state.isLoading = false;
+      })
+      .addCase(fetchEvents.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(fetchEvents.fulfilled, (state, {payload}) => {
+        state.error = null;
+        state.events = payload;
+        state.isLoading = false;
+      })
+      .addCase(fetchEvents.rejected, (state, {payload}) => {
+        state.error = payload;
+        state.isLoading = false;
+      })
+      .addCase(addUserEvent.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(addUserEvent.fulfilled, (state, {payload}) => {
+        state.error = null;
+        state.events.push(payload);
+        state.isLoading = false;
+      })
+      .addCase(addUserEvent.rejected, (state, {payload}) => {
+        state.error = payload;
+        state.isLoading = false;
+      });
+  },
+});
+
+export default eventsSlice.reducer;
+
+export const {setGuests, setEvents, setIsloading, setError} =
+  eventsSlice.actions;
 
 /**
- * Reducer
+ * Thunks
  */
-const initialState = {
-  guests: [],
-  events: [],
-  isLoading: false,
-  error: null
-};
-
-export default (state = initialState, {type, payload}) => {
-  switch (type) {
-
-    case SET_GUESTS:
-      return {...state, guests: payload};
-    case SET_EVENTS:
-      return {...state, events: payload};
-    case SET_IS_LOADING:
-      return {...state, isLoading: payload};
-    case SET_ERROR:
-      return {...state, error: payload};
-
-    default:
-      return state;
+export const fetchGuests = createAsyncThunk(
+  `${moduleName}/fetchGuests`,
+  async (_, {rejectWithValue}) => {
+    try {
+      const response = await getUsers();
+      return response.data;
+    } catch (e) {
+      rejectWithValue('Server: Error while fetching guests');
+    }
   }
-}
+);
+
+export const fetchEvents = createAsyncThunk(
+  `${moduleName}/fetchEvents`,
+  async (username, {rejectWithValue}) => {
+    try {
+      const response = await getEventsByUser({username});
+      return response.data;
+    } catch (e) {
+      rejectWithValue('Server: Error while fetching events');
+    }
+  }
+);
+
+export const addUserEvent = createAsyncThunk(
+  `${moduleName}/addUserEvent`,
+  async (userEvent, {dispatch, getState, rejectWithValue}) => {
+    try {
+      const response = await addEvent(userEvent);
+
+      dispatch(
+        setNotification(
+          {type: 'success', message: 'New event is successfully added'},
+          moduleName
+        )
+      );
+
+      return response.data;
+    } catch (e) {
+      rejectWithValue('Server: Error while adding new event');
+    }
+  }
+);
 
 /**
  * Hooks
@@ -49,92 +133,21 @@ export default (state = initialState, {type, payload}) => {
 export const useEventsActions = () => {
   const dispatch = useDispatch();
   return useMemo(
-    () => bindActionCreators({
-      setGuests,
-      setEvents,
-      setIsLoading,
-      setError,
-      fetchGuests,
-      fetchEvents,
-      addUserEvent
-    }, dispatch),
+    () =>
+      bindActionCreators(
+        {
+          ...eventsSlice.actions,
+          fetchGuests,
+          fetchEvents,
+          addUserEvent,
+        },
+        dispatch
+      ),
     [dispatch]
   );
 };
 
-export const useEventsSelector = () => useSelector((state) => state.events);
-
-/**
- * Thunks
- */
-export const fetchGuests = () => async (dispatch) => {
-  dispatch(setIsLoading(true));
-
-  try {
-    const response = await getUsers();
-
-    dispatch(setError());
-    dispatch(setGuests(response.data));
-  } catch (e) {
-    dispatch(setError('Server: Error while fetching guests'));
-  }
-
-  dispatch(setIsLoading(false));
+export const useEventsSelector = () => {
+  const events = useSelector((state) => state.events);
+  return useMemo(() => events, [events]);
 };
-
-export const fetchEvents = (username) => async (dispatch) => {
-  dispatch(setIsLoading(true));
-
-  try {
-    const response = await getEventsByUser({username});
-
-    dispatch(setError());
-    dispatch(setEvents(response.data));
-  } catch (e) {
-    dispatch(setError('Server: Error while fetching events'));
-  }
-
-  dispatch(setIsLoading(false));
-};
-
-export const addUserEvent = (userEvent) => async (dispatch, getState) => {
-  dispatch(setIsLoading(true));
-
-  try {
-    const response = await addEvent(userEvent);
-    const userEvents = [...getState().events.events, response.data];
-
-    dispatch(setError());
-    dispatch(setEvents(userEvents));
-    dispatch(setNotification({type: 'success', message: 'New event is successfully added'}, moduleName));
-  } catch (e) {
-    dispatch(setError('Server: Error while adding new event'));
-  }
-
-  dispatch(setIsLoading(false));
-};
-
-/**
- * Action creators
- */
-export const setGuests = (guests) => ({
-  type: SET_GUESTS,
-  payload: guests
-});
-
-export const setEvents = (events) => ({
-  type: SET_EVENTS,
-  payload: events
-});
-
-export const setIsLoading = (isLoading) => ({
-  type: SET_IS_LOADING,
-  payload: isLoading
-});
-
-export const setError = (error = null) => ({
-  type: SET_ERROR,
-  payload: error
-});
-
-

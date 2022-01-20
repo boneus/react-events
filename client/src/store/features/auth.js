@@ -1,5 +1,9 @@
 import {useMemo} from 'react';
-import {bindActionCreators} from 'redux';
+import {
+  createSlice,
+  createAsyncThunk,
+  bindActionCreators,
+} from '@reduxjs/toolkit';
 import {useDispatch, useSelector} from 'react-redux';
 
 import {getUser} from '@apis/users';
@@ -8,64 +12,69 @@ import {setEvents} from './events';
 
 export const moduleName = 'AUTH';
 
-/**
- * Action types
- */
-export const SET_IS_AUTHED = `${moduleName}/setIsAuthed`;
-export const SET_USER = `${moduleName}/setUser`;
-export const SET_IS_LOADING = `${moduleName}/setIsLoading`;
-export const SET_ERROR = `${moduleName}/setError`;
+const authSlice = createSlice({
+  name: moduleName,
+  initialState: {
+    isAuthed: false,
+    user: {},
+    isLoading: false,
+    error: null,
+  },
+  reducers: {
+    setIsAuthed: (state, {payload}) => {
+      state.isAuthed = payload;
+    },
+    setUser: (state, {payload}) => {
+      state.user = payload;
+    },
+    setIsLoading: (state, {payload}) => {
+      state.isLoading = payload;
+    },
+    setError: (state, {payload}) => {
+      state.error = payload;
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(login.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(login.fulfilled, (state, {payload}) => {
+        state.error = null;
+        state.user = payload;
+        state.isAuthed = true;
+        state.isLoading = false;
+      })
+      .addCase(login.rejected, (state, {payload}) => {
+        state.error = payload;
+        state.isLoading = false;
+      })
+      .addCase(logout.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(logout.fulfilled, (state) => {
+        state.error = null;
+        state.isAuthed = false;
+        state.user = {};
+        state.isLoading = false;
+      })
+      .addCase(logout.rejected, (state, {payload}) => {
+        state.error = payload;
+        state.isLoading = false;
+      });
+  },
+});
 
-/**
- * Reducer
- */
-const initialState = {
-  isAuthed: false,
-  user: {},
-  isLoading: false,
-  error: null
-};
+export default authSlice.reducer;
 
-export default (state = initialState, {type, payload}) => {
-  switch (type) {
-    case SET_IS_AUTHED:
-      return {...state, isAuthed: payload};
-    case SET_USER:
-      return {...state, user: payload};
-    case SET_IS_LOADING:
-      return {...state, isLoading: payload};
-    case SET_ERROR:
-      return {...state, error: payload};
-
-    default:
-      return state;
-  }
-};
-
-/**
- * Hooks
- */
-export const useAuthActions = () => {
-  const dispatch = useDispatch();
-  return useMemo(
-    () =>
-      bindActionCreators(
-        {setIsAuthed, setUser, setIsLoading, setError, login, logout},
-        dispatch
-      ),
-    [dispatch]
-  );
-};
-
-export const useAuthSelector = () => useSelector((state) => state.auth);
+export const {setIsAuthed, setUser, setIsLoading, setError} = authSlice.actions;
 
 /**
  * Thunks
  */
-export const login = (credentials) => (dispatch) => {
-  dispatch(setIsLoading(true));
-
-  setTimeout(async () => {
+export const login = createAsyncThunk(
+  `${moduleName}/login`,
+  async (credentials, {dispatch, rejectWithValue}) => {
     try {
       const response = await getUser(credentials);
       const authedUser = response.data[0];
@@ -75,51 +84,45 @@ export const login = (credentials) => (dispatch) => {
         localStorage.setItem('username', authedUser.username);
 
         delete authedUser.password;
-        dispatch(setError());
-        dispatch(setUser(authedUser));
-        dispatch(setIsAuthed(true));
-        dispatch(setNotification({type: 'success', message: 'Welcome!'}, moduleName));
+        dispatch(
+          setNotification({type: 'success', message: 'Welcome!'}, moduleName)
+        );
+
+        return authedUser;
       } else {
-        dispatch(setError('Invalid username or password'));
+        rejectWithValue('Invalid username or password');
       }
     } catch (e) {
-      dispatch(setError('Server: Error while logging in'));
+      rejectWithValue('Server: Error while logging in');
     }
+  }
+);
 
-    dispatch(setIsLoading(false));
-  }, 1000);
-};
+export const logout = createAsyncThunk(
+  `${moduleName}/logout`,
+  async (_, {dispatch}) => {
+    localStorage.removeItem('auth');
+    localStorage.removeItem('username');
 
-export const logout = () => (dispatch) => {
-  localStorage.removeItem('auth');
-  localStorage.removeItem('username');
-
-  dispatch(setIsAuthed(false));
-  dispatch(setUser({}));
-  dispatch(setNotification({type: 'success', message: 'Goodbye!'}, moduleName));
-  dispatch(setEvents([]));
-};
+    dispatch(
+      setNotification({type: 'success', message: 'Goodbye!'}, moduleName)
+    );
+    dispatch(setEvents([]));
+  }
+);
 
 /**
- * Action creators
+ * Hooks
  */
-export const setIsAuthed = (isAuthed) => ({
-  type: SET_IS_AUTHED,
-  payload: isAuthed,
-});
+export const useAuthActions = () => {
+  const dispatch = useDispatch();
+  return useMemo(
+    () => bindActionCreators({...authSlice.actions, login, logout}, dispatch),
+    [dispatch]
+  );
+};
 
-export const setUser = (user) => ({
-  type: SET_USER,
-  payload: user,
-});
-
-export const setIsLoading = (isloading) => ({
-  type: SET_IS_LOADING,
-  payload: isloading,
-});
-
-export const setError = (error = null) => ({
-  type: SET_ERROR,
-  payload: error,
-});
-
+export const useAuthSelector = () => {
+  const auth = useSelector((state) => state.auth);
+  return useMemo(() => auth, [auth]);
+};
