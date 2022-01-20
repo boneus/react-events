@@ -9,7 +9,7 @@ export default defineConfig({
     port: process.env.PORT || 3000,
     hmr: {
       clientPort: process.env.NGINX_PORT || process.env.PORT || 3000,
-    }
+    },
   },
   plugins: [react()],
   resolve: {
@@ -22,6 +22,7 @@ export default defineConfig({
       '@apis': path.resolve(__dirname, './src/apis'),
       '@hooks': path.resolve(__dirname, './src/hooks'),
       '@configs': path.resolve(__dirname, './src/configs'),
+      '@models': path.resolve(__dirname, './src/models'),
       '@': path.resolve(__dirname, './src'),
     },
   },

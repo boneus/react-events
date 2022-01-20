@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "tsc && vite build",
     "serve": "vite preview",
     "start": "npm run build && npm run serve"
   },
@@ -18,8 +18,12 @@
     "react-router-dom": "^6.2.1"
   },
   "devDependencies": {
+    "@types/react": "^17.0.38",
+    "@types/react-dom": "^17.0.11",
+    "@types/react-redux": "^7.1.22",
+    "@types/react-router-dom": "^5.3.3",
     "@vitejs/plugin-react": "^1.1.4",
-    "prop-types": "^15.8.1",
+    "typescript": "^4.5.4",
     "vite": "^2.7.10"
   },
   "author": "Stanislav Tiptsov <4terion@gmail.com>",
