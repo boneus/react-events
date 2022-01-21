@@ -1,9 +1,10 @@
+import {FC} from 'react';
 import {Card} from 'antd';
 
+import {LoginForm} from '@components';
 import {useAuthActions, useAuthSelector} from '@store/features/auth';
-import LoginForm from '@components/LoginForm';
 
-const Login = () => {
+const Login: FC = () => {
   const {isLoading} = useAuthSelector();
   const {login} = useAuthActions();
 

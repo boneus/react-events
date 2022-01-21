@@ -1,4 +1,4 @@
-import {useEffect} from 'react';
+import {FC, useEffect} from 'react';
 import {Layout} from 'antd';
 import 'antd/dist/antd.css';
 
@@ -6,7 +6,7 @@ import {useAuthActions} from '@store/features/auth';
 import AppRouter from '@router';
 import './App.css';
 
-function App() {
+const App: FC = () => {
   const {setUser, setIsAuthed} = useAuthActions();
 
   useEffect(() => {
@@ -17,10 +17,10 @@ function App() {
   }, []);
 
   return (
-    <Layout className="layout">
-      <AppRouter/>
+    <Layout className='layout'>
+      <AppRouter />
     </Layout>
   );
-}
+};
 
 export default App;

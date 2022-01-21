@@ -1,14 +1,28 @@
-import {useEffect, useState} from 'react';
-import PropTypes from 'prop-types';
+import {FC, useEffect, useState} from 'react';
 import dayjs from 'dayjs';
 import {Button, Form, Input, Row, Select} from 'antd';
 
-import DatePicker from '@components/DatePicker';
+import {IUser, TNewEvent} from '@models';
+import {DatePicker} from '@components';
 import {validationRules} from '@utils/forms';
 import {formatDate} from '@utils/dates';
 
-const EventForm = ({guests, onSubmit, author, selectedDate, isLoading}) => {
-  const [event, setEvent] = useState({
+interface IEventFormProps {
+  author: IUser;
+  selectedDate?: dayjs.Dayjs;
+  guests?: IUser[];
+  onSubmit: (event: TNewEvent) => void;
+  isLoading?: boolean;
+}
+
+export const EventForm: FC<IEventFormProps> = ({
+  guests = [],
+  onSubmit,
+  author,
+  selectedDate = dayjs(),
+  isLoading = false,
+}) => {
+  const [event, setEvent] = useState<TNewEvent>({
     date: formatDate(selectedDate.toDate()),
     description: '',
     guest: '',
@@ -18,24 +32,15 @@ const EventForm = ({guests, onSubmit, author, selectedDate, isLoading}) => {
 
   useEffect(() => {
     setEvent({...event, date: formatDate(selectedDate.toDate())});
+    form.setFieldsValue({...event, date: selectedDate});
   }, [selectedDate]);
 
-  useEffect(() => {
-    form.setFieldsValue({...event, date: selectedDate});
-  }, [selectedDate, event]);
-
-  const selectDate = (date) => {
+  const selectDate: (date: dayjs.Dayjs | null) => void = (date) => {
     if (date) setEvent({...event, date: formatDate(date.toDate())});
   };
 
-  const submit = async () => {
-    await onSubmit(event);
-    setEvent({
-      date: formatDate(selectedDate.toDate()),
-      description: '',
-      guest: '',
-      author: author.username,
-    });
+  const submit = () => {
+    onSubmit(event);
   };
 
   return (
@@ -87,19 +92,3 @@ const EventForm = ({guests, onSubmit, author, selectedDate, isLoading}) => {
     </Form>
   );
 };
-
-EventForm.propTypes = {
-  author: PropTypes.shape({username: PropTypes.string}).isRequired,
-  selectedDate: PropTypes.instanceOf(dayjs),
-  guests: PropTypes.arrayOf(PropTypes.shape({username: PropTypes.string})),
-  onSubmit: PropTypes.func.isRequired,
-  isLoading: PropTypes.bool,
-};
-
-EventForm.defaultProps = {
-  selectedDate: dayjs(),
-  guests: [],
-  isLoading: false,
-};
-
-export default EventForm;

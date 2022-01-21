@@ -1,15 +1,15 @@
-import {useEffect, useState} from 'react';
+import {FC, useEffect, useState} from 'react';
 import dayjs from 'dayjs';
 import {Modal} from 'antd';
 
+import {TNewEvent} from '@models';
+import {EventsCalendar, EventForm} from '@components';
 import {useAuthSelector} from '@store/features/auth';
 import {useEventsActions, useEventsSelector} from '@store/features/events';
-import EventsCalendar from '@components/EventsCalendar';
-import EventForm from '@components/EventForm';
 
-const Events = () => {
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(dayjs());
+const Events: FC = () => {
+  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+  const [selectedDate, setSelectedDate] = useState<dayjs.Dayjs>(dayjs());
 
   const {user} = useAuthSelector();
   const {guests, events, isLoading} = useEventsSelector();
@@ -20,13 +20,13 @@ const Events = () => {
     fetchEvents(user.username);
   }, []);
 
-  const onDateSelect = (date) => {
+  const onDateSelect: (date: dayjs.Dayjs) => void = (date) => {
     setSelectedDate(date);
     setIsModalVisible(true);
   };
 
-  const addNewEvent = async (event) => {
-    await addUserEvent(event);
+  const addNewEvent: (event: TNewEvent) => void = (event) => {
+    addUserEvent(event);
     setIsModalVisible(false);
   };
 
