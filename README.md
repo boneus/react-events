@@ -5,7 +5,7 @@
 There are two branches in the project:
 
 - `main`: React 17, PropTypes 15, Redux 4.1 + Redux Thunk 2.4, React Router 6, Ant Design 4.18.
-- `rtk-typescript`: React 17, TypeScript 4.4, Redux Toolkit 1.6, React Router 6, Ant Design 4.18.
+- `rtk-typescript`: React 17, TypeScript 4.5, Redux Toolkit 1.7, React Router 6, Ant Design 4.18.
 
 ## Key moments
 
