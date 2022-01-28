@@ -12,6 +12,7 @@ const EventForm = ({guests, onSubmit, author, selectedDate, isLoading}) => {
     date: formatDate(selectedDate.toDate()),
     description: '',
     guest: '',
+    author: author.username,
   });
   const [form] = Form.useForm();
 
