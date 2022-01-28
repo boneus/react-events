@@ -17,22 +17,31 @@ const EventForm = ({guests, onSubmit, author, selectedDate, isLoading}) => {
 
   useEffect(() => {
     setEvent({...event, date: formatDate(selectedDate.toDate())});
-    form.setFieldsValue({...event, date: selectedDate});
   }, [selectedDate]);
+
+  useEffect(() => {
+    form.setFieldsValue({...event, date: selectedDate});
+  }, [selectedDate, event]);
 
   const selectDate = (date) => {
     if (date) setEvent({...event, date: formatDate(date.toDate())});
   };
 
-  const submit = () => {
-    onSubmit({...event, author: author.username});
+  const submit = async () => {
+    await onSubmit(event);
+    setEvent({
+      date: formatDate(selectedDate.toDate()),
+      description: '',
+      guest: '',
+      author: author.username,
+    });
   };
 
   return (
     <Form onFinish={submit} form={form}>
       <Form.Item
-        label="Event description"
-        name="description"
+        label='Event description'
+        name='description'
         rules={[validationRules.required()]}
       >
         <Input
@@ -42,29 +51,34 @@ const EventForm = ({guests, onSubmit, author, selectedDate, isLoading}) => {
       </Form.Item>
 
       <Form.Item
-        label="Event date"
-        name="date"
+        label='Event date'
+        name='date'
         rules={[validationRules.required(), validationRules.isDateAfter()]}
       >
-        <DatePicker onChange={(date) => selectDate(date)} value={selectedDate}
-                    disabledDate={current => current < dayjs().subtract(1, 'day')}/>
+        <DatePicker
+          onChange={(date) => selectDate(date)}
+          value={selectedDate}
+          disabledDate={(current) => current < dayjs().subtract(1, 'day')}
+        />
       </Form.Item>
 
       <Form.Item
-        label="Guest"
-        name="guest"
+        label='Guest'
+        name='guest'
         rules={[validationRules.required()]}
       >
         <Select onChange={(guest) => setEvent({...event, guest})}>
           {guests.map(({username}) => (
-            <Select.Option key={username} value={username}>{username}</Select.Option>
+            <Select.Option key={username} value={username}>
+              {username}
+            </Select.Option>
           ))}
         </Select>
       </Form.Item>
 
-      <Row justify="end">
+      <Row justify='end'>
         <Form.Item>
-          <Button type="primary" htmlType="submit" loading={isLoading}>
+          <Button type='primary' htmlType='submit' loading={isLoading}>
             Add
           </Button>
         </Form.Item>
@@ -78,13 +92,13 @@ EventForm.propTypes = {
   selectedDate: PropTypes.instanceOf(dayjs),
   guests: PropTypes.arrayOf(PropTypes.shape({username: PropTypes.string})),
   onSubmit: PropTypes.func.isRequired,
-  isLoading: PropTypes.bool
+  isLoading: PropTypes.bool,
 };
 
 EventForm.defaultProps = {
   selectedDate: dayjs(),
   guests: [],
-  isLoading: false
+  isLoading: false,
 };
 
 export default EventForm;

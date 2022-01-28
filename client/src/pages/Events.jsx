@@ -25,21 +25,27 @@ const Events = () => {
     setIsModalVisible(true);
   };
 
-  const addNewEvent = (event) => {
-    addUserEvent(event);
+  const addNewEvent = async (event) => {
+    await addUserEvent(event);
     setIsModalVisible(false);
   };
 
   return (
     <>
-      <EventsCalendar events={events} onSelect={onDateSelect}/>
+      <EventsCalendar events={events} onSelect={onDateSelect} />
       <Modal
-        title="Add event"
+        title='Add event'
         visible={isModalVisible}
         footer={null}
         onCancel={() => setIsModalVisible(false)}
       >
-        <EventForm guests={guests} onSubmit={addNewEvent} author={user} selectedDate={selectedDate} isLoading={isLoading}/>
+        <EventForm
+          guests={guests}
+          onSubmit={addNewEvent}
+          author={user}
+          selectedDate={selectedDate}
+          isLoading={isLoading}
+        />
       </Modal>
     </>
   );
